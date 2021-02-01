@@ -1,13 +1,18 @@
+import sys
 class Grafo:
 
     vertices=[]
     qntVertices=0
     indice=0
+    marcado=[]
+    numeroDeComponentes=0
     def __init__(self) -> None:
         pass
 
 #Implementar como funcões da classe ou como funções separadas??
 #Como transformar em uma biblioteca?
+#'v.comp := ncomp' no slide 38 de BP?
+#Limite de recursão na funçao BP?
 
 def Graph() -> Grafo:
     #criar novo grafo vazio
@@ -20,6 +25,7 @@ def loadData(caminho,grafo) -> None:
         grafo.qntVertices = arquivo.readline()
         for i in range(0,int(grafo.qntVertices)+1):
             grafo.vertices.append([])
+            grafo.marcado.append(False)
         for line in arquivo:
             linha = line.split()
             vert1 = int(linha[0])
@@ -33,11 +39,8 @@ def minDegree(grafo) -> int:
     #grau minimo do grafo
     count = 0
     menorGrau = 999999999999999999999
-    print(menorGrau,type(menorGrau))
     for i in range(0,len(grafo.vertices)):
-        count=0
-        for j in range(0,len(grafo.vertices[i])):
-            count=count+1
+        count=len(grafo.vertices[i])
         if count<menorGrau :
             menorGrau=count
     
@@ -49,9 +52,7 @@ def maxDegree(grafo) -> int:
     maiorGrau = 0
     novoGrafo.indice = 0
     for i in range(0,len(grafo.vertices)):
-        count=0
-        for j in range(0,len(grafo.vertices[i])):
-            count=count+1
+        count=len(grafo.vertices[i])
         if count>maiorGrau :
             maiorGrau=count
             novoGrafo.indice = i
@@ -62,17 +63,28 @@ def numEdges(grafo) -> int:
     #numero de arestas do grafo
     count = 0
     for i in range(0,len(grafo.vertices)):
-        for j in range(0,len(grafo.vertices[i])):
-            count=count+1
+        count=count+len(grafo.vertices[i])
     return int(count/2)
 
 def numVertex(grafo) -> int:
     #numero de vertices do grafo
     return len(grafo.vertices)
 
-def components() -> None:
+def components(grafo) -> int:
     #Busca em profundidade no grafo para retornar numero de componentes conexos
-    pass
+    grafo.numeroDeComponentes=0
+    for i in range(0,len(grafo.vertices)):
+        if(grafo.marcado[i]==False):
+            BP(grafo,i)
+            grafo.numeroDeComponentes+=1
+
+    return grafo.numeroDeComponentes
+
+def BP(grafo,verticeInicial) -> None:
+    grafo.marcado[verticeInicial]=True
+    for i in range(0,len(grafo.vertices[verticeInicial])):
+        if(grafo.marcado[grafo.vertices[verticeInicial][i]-1]==False):
+            BP(grafo,grafo.vertices[verticeInicial][i]-1)
 
 novoGrafo = Graph()
 
@@ -86,9 +98,14 @@ print("Numero de arestas:",numEdges(novoGrafo))
 
 print("Numero de vertices:",numVertex(novoGrafo))
 
+#sys.setrecursionlimit(4000)
 
-print(novoGrafo.vertices[18])
-print(novoGrafo.vertices[502443])
-print(novoGrafo.vertices[novoGrafo.indice-1])
-#print(novoGrafo.vertices[novoGrafo.indice])
-print(novoGrafo.vertices[novoGrafo.indice+1])
+print("Numero de componentes:", components(novoGrafo))
+
+#print(novoGrafo.vertices)
+#print(novoGrafo.marcado[novoGrafo.vertices[0][0]])
+#print(novoGrafo.vertices[0][0])
+
+#print(novoGrafo.vertices[0])
+#print(novoGrafo.vertices[18])
+#print(novoGrafo.vertices[502443])
