@@ -1,4 +1,3 @@
-import sys
 class Grafo:
 
     vertices=[]
@@ -8,11 +7,6 @@ class Grafo:
     numeroDeComponentes=0
     def __init__(self) -> None:
         pass
-
-#Implementar como funcões da classe ou como funções separadas??
-#Como transformar em uma biblioteca?
-#'v.comp := ncomp' no slide 38 de BP?
-#Limite de recursão na funçao BP?
 
 def Graph() -> Grafo:
     #criar novo grafo vazio
@@ -28,10 +22,13 @@ def loadData(caminho,grafo) -> None:
             grafo.marcado.append(False)
         for line in arquivo:
             linha = line.split()
-            vert1 = int(linha[0])
-            vert2 = int(linha[1])
-            grafo.vertices[vert1].append(vert2)
-            grafo.vertices[vert2].append(vert1)
+            try:
+                vert1 = int(linha[0])
+                vert2 = int(linha[1])
+                grafo.vertices[vert1].append(vert2)
+                grafo.vertices[vert2].append(vert1)
+            except:
+                pass
         grafo.vertices.pop(0)
 
 
@@ -78,13 +75,41 @@ def components(grafo) -> int:
             BP(grafo,i)
             grafo.numeroDeComponentes+=1
 
+    for i in range(0,len(grafo.marcado)):
+        grafo.marcado[i]=False
+    
     return grafo.numeroDeComponentes
 
 def BP(grafo,verticeInicial) -> None:
+    #BP Recursiva
     grafo.marcado[verticeInicial]=True
     for i in range(0,len(grafo.vertices[verticeInicial])):
         if(grafo.marcado[grafo.vertices[verticeInicial][i]-1]==False):
             BP(grafo,grafo.vertices[verticeInicial][i]-1)
+
+def components_BP_Iterativa(grafo) -> int:
+    #Busca em profundidade no grafo para retornar numero de componentes conexos
+    grafo.numeroDeComponentes=0
+    for i in range(0,len(grafo.vertices)):
+        if(grafo.marcado[i]==False):
+            BP_Iterativa(grafo,i)
+            grafo.numeroDeComponentes+=1
+
+    for i in range(0,len(grafo.marcado)):
+        grafo.marcado[i]=False
+    
+    return grafo.numeroDeComponentes
+
+def BP_Iterativa(graph, start_vertex) -> None:
+    #Busca em profundidade iterativa
+    stack = [start_vertex]
+    while stack:
+        vertex = stack.pop()
+        if graph.marcado[vertex]==False:
+            graph.marcado[vertex]=True
+            # add vertex in the same order as visited:
+            stack.extend(reversed(graph.vertices[vertex-1]))
+    return
 
 novoGrafo = Graph()
 
@@ -98,14 +123,6 @@ print("Numero de arestas:",numEdges(novoGrafo))
 
 print("Numero de vertices:",numVertex(novoGrafo))
 
-#sys.setrecursionlimit(4000)
+#print("BP Recursiva - Num de componentes:",components(novoGrafo))
 
-print("Numero de componentes:", components(novoGrafo))
-
-#print(novoGrafo.vertices)
-#print(novoGrafo.marcado[novoGrafo.vertices[0][0]])
-#print(novoGrafo.vertices[0][0])
-
-#print(novoGrafo.vertices[0])
-#print(novoGrafo.vertices[18])
-#print(novoGrafo.vertices[502443])
+print("BP Iterativa - Num de componentes:",components_BP_Iterativa(novoGrafo))
