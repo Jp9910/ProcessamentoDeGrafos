@@ -113,16 +113,18 @@ def BP_Iterativa(graph, start_vertex) -> None:
 
 novoGrafo = Graph()
 
-loadData("C:/Users/JPC/Documents/ufs/Grafos/dblp.txt",novoGrafo)
+#loadData("<CAMINHO DO ARQUIVO>",novoGrafo)
+loadData("C:/Users/JPC/Documents/ufs/[Semestres anteriores]/Grafos/dblp.txt",novoGrafo)
 
 print("Grau minimo:",minDegree(novoGrafo))
 
-print("Grau maximo:",maxDegree(novoGrafo),"- indice:",novoGrafo.indice)
+print("Grau maximo:",maxDegree(novoGrafo),"- indice:",novoGrafo.indice,"- ID:",novoGrafo.indice+1)
 
 print("Numero de arestas:",numEdges(novoGrafo))
 
 print("Numero de vertices:",numVertex(novoGrafo))
 
+#BP RECURSIVA RESULTA EM ESTOURO DO LIMITE DE RECURSÃO
 #print("BP Recursiva - Num de componentes:",components(novoGrafo))
 
 print("BP Iterativa - Num de componentes:",components_BP_Iterativa(novoGrafo))
