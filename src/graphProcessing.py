@@ -1,20 +1,18 @@
 class Grafo:
-
-    vertices=[]
-    qntVertices=0
-    indice=0
-    marcado=[]
-    numeroDeComponentes=0
     def __init__(self) -> None:
-        pass
+        self.vertices=[]
+        self.qntVertices=0
+        self.indice=0
+        self.marcado=[]
+        self.numeroDeComponentes=0
 
-def Graph() -> Grafo:
-    #criar novo grafo vazio
+def newGraph() -> Grafo:
+    """Retorna um novo grafo vazio"""
     grafo = Grafo()
     return grafo
 
 def loadData(caminho,grafo) -> None:
-    #preencher o grafo
+    """preenche o grafo"""
     with open (caminho,"r") as arquivo:
         grafo.qntVertices = arquivo.readline()
         for i in range(0,int(grafo.qntVertices)+1):
@@ -33,7 +31,7 @@ def loadData(caminho,grafo) -> None:
 
 
 def minDegree(grafo) -> int:
-    #grau minimo do grafo
+    """retorna o grau minimo do grafo"""
     count = 0
     menorGrau = 999999999999999999999
     for i in range(0,len(grafo.vertices)):
@@ -44,7 +42,7 @@ def minDegree(grafo) -> int:
     return menorGrau
 
 def maxDegree(grafo) -> int:
-    #grau maximo do grafo
+    """retorna o grau maximo do grafo"""
     count = 0
     maiorGrau = 0
     novoGrafo.indice = 0
@@ -57,18 +55,18 @@ def maxDegree(grafo) -> int:
     return maiorGrau
 
 def numEdges(grafo) -> int:
-    #numero de arestas do grafo
+    """retorna numero de arestas do grafo"""
     count = 0
     for i in range(0,len(grafo.vertices)):
         count=count+len(grafo.vertices[i])
     return int(count/2)
 
 def numVertex(grafo) -> int:
-    #numero de vertices do grafo
+    """retorna o numero de vertices do grafo"""
     return len(grafo.vertices)
 
 def components(grafo) -> int:
-    #Busca em profundidade no grafo para retornar numero de componentes conexos
+    """Busca em profundidade recursiva no grafo para retornar numero de componentes conexos"""
     grafo.numeroDeComponentes=0
     for i in range(0,len(grafo.vertices)):
         if(grafo.marcado[i]==False):
@@ -81,14 +79,14 @@ def components(grafo) -> int:
     return grafo.numeroDeComponentes
 
 def BP(grafo,verticeInicial) -> None:
-    #BP Recursiva
+    """Busca em profundidade recursiva"""
     grafo.marcado[verticeInicial]=True
     for i in range(0,len(grafo.vertices[verticeInicial])):
         if(grafo.marcado[grafo.vertices[verticeInicial][i]-1]==False):
             BP(grafo,grafo.vertices[verticeInicial][i]-1)
 
 def components_BP_Iterativa(grafo) -> int:
-    #Busca em profundidade no grafo para retornar numero de componentes conexos
+    """Busca em profundidade iterativa no grafo para retornar numero de componentes conexos"""
     grafo.numeroDeComponentes=0
     for i in range(0,len(grafo.vertices)):
         if(grafo.marcado[i]==False):
@@ -101,7 +99,7 @@ def components_BP_Iterativa(grafo) -> int:
     return grafo.numeroDeComponentes
 
 def BP_Iterativa(graph, start_vertex) -> None:
-    #Busca em profundidade iterativa
+    """Busca em profundidade iterativa"""
     stack = [start_vertex]
     while stack:
         vertex = stack.pop()
@@ -111,7 +109,7 @@ def BP_Iterativa(graph, start_vertex) -> None:
             stack.extend(reversed(graph.vertices[vertex-1]))
     return
 
-novoGrafo = Graph()
+novoGrafo = Grafo()
 
 #loadData("<CAMINHO DO ARQUIVO>",novoGrafo)
 loadData("C:/Users/JPC/Documents/ufs/[Semestres anteriores]/Grafos/dblp.txt",novoGrafo)
