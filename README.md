@@ -30,16 +30,26 @@ se marcado[544] for = true, o vertice[544] já foi marcado
 Quantidade de vértices, seguido das arestas (2 vértices).
 
 > Quantidade de vértices
+
 > VérticeA VérticeB
 
 Ex:
 >544
+
 >1 344
+
 >1 130
+
 >1 500
+
 >2 433
+
 >5 69
+
 >9 82
+
 >3 234
+
 >532 95
+
 >...

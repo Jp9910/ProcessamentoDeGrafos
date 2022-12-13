@@ -66,24 +66,34 @@ def numVertex(grafo) -> int:
     return len(grafo.vertices)
 
 def components(grafo) -> int:
-    """Busca em profundidade recursiva no grafo para retornar numero de componentes conexos"""
+    """
+    Busca em profundidade recursiva no grafo para retornar numero de componentes conexos
+    
+    - Time complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
+    
+    - Auxiliary Space: O(V), since an extra visited array of size V is required.
+    """
     grafo.numeroDeComponentes=0
     for i in range(0,len(grafo.vertices)):
+        # Vai começar com o primeiro vértice sempre desmarcado. Os próximos só estarão desmarcados se não fizerem parte do grafo conexo do vértice inicial.
         if(grafo.marcado[i]==False):
+            # Aqui ele marcará TODOS os vértices que possuem conexão (direta ou não) com o primeiro, ou seja todo o grafo conexo a partir do vértice inicial.
             BP(grafo,i)
+            # Ou seja, se achou algum vértice desmarcado depois de executar BP, adiciona mais um grafo conexo.
             grafo.numeroDeComponentes+=1
 
     for i in range(0,len(grafo.marcado)):
+        # Desmarcar todos os vértices após a busca.
         grafo.marcado[i]=False
     
     return grafo.numeroDeComponentes
 
 def BP(grafo,verticeInicial) -> None:
     """Busca em profundidade recursiva"""
-    grafo.marcado[verticeInicial]=True
-    for i in range(0,len(grafo.vertices[verticeInicial])):
-        if(grafo.marcado[grafo.vertices[verticeInicial][i]-1]==False):
-            BP(grafo,grafo.vertices[verticeInicial][i]-1)
+    grafo.marcado[verticeInicial]=True #Buscar a partir do vértice inicial. Considerá-lo então como marcado
+    for i in range(0,len(grafo.vertices[verticeInicial])): #Pra cada aresta desse vértice inicial
+        if(grafo.marcado[grafo.vertices[verticeInicial][i]-1]==False): #Se o vértice da outra ponta da aresta ainda não foi marcado
+            BP(grafo,grafo.vertices[verticeInicial][i]-1) #Executar BP nesse vértice da outra ponta
 
 def components_BP_Iterativa(grafo) -> int:
     """Busca em profundidade iterativa no grafo para retornar numero de componentes conexos"""
